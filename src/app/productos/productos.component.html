@@ -1,0 +1,288 @@
+<!--
+  
+  <div class="container" >
+      <div class="row">
+              <div class="col-md-4 mt-3">
+                  <form class="d-flex">
+                    <a class="nav-link" routerLink="productos">Productos</a>
+                      <input class="form-control me-lg-12" [formControl]="clave" ng-model="searchText" type="text" placeholder="Palabra clave: Guitarra" aria-label="Search">
+                      <button (click) = "busquedaClave()" class="btn btn-outline-success" type="submit">Buscar</button>
+                      <button (click) = "quitarBusqueda()" class="btn btn-outline-success" type="submit">Quitar</button>
+                      <svg class="bi" width="32" height="32" fill="currentColor">
+                        <use xlink:href="bootstrap-icons.svg#heart-fill"/>
+                      </svg>
+                    </form> 
+              </div>   
+              <div class="col-md-4 mt-8">
+              </div>
+              <div class="col-md-4 mt-3">
+                  <button data-bs-target="#exampleModal" data-bs-toggle="modal" class="btn float-end"><i class="bi bi-cart"></i>Carrito<span *ngIf="productosCarrito.length>0">({{productosCarrito.length}})</span></button>
+              </div>
+      </div>
+      
+  </div>
+  <hr>
+  -->
+
+<!--Navbar-->
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="nav-link" routerLink="productos">Productos</a>
+    <form class="d-flex">
+      <input class="form-control me-lg-12" [formControl]="clave" ng-model="searchText" type="text"
+        placeholder="Buscar productos" aria-label="Search">
+      <button (click)="busquedaClave()" class="btn btn-outline-success" type="submit">Buscar</button>
+      <!--<button (click) = "quitarBusqueda()" class="btn btn-outline-success" type="submit">limpiar</button> -->
+      <svg class="bi" width="32" height="32" fill="currentColor">
+        <use xlink:href="bootstrap-icons.svg#heart-fill" />
+      </svg>
+
+    </form>
+    <div class="bg-warning">{{serviceData.userSesion}}</div>
+    <button data-bs-target="#exampleModal" data-bs-toggle="modal"><i class="bi bi-cart3"></i>Carrito<span
+        *ngIf="productosCarrito.length>0">({{productosCarrito.length}})</span></button>
+
+  </div>
+
+</nav>
+<!--Fin Navbar-->
+
+<!-- CARRUSEL-->
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+      aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+      aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+      aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://www.fender.cl/media/wysiwyg/slider2.jpg" class="d-block w-100" alt="">
+    </div>
+    <div class="carousel-item">
+      <img src="https://www.fender.cl/media/wysiwyg/slider_vintera.jpg" class="d-block w-100" alt="">
+    </div>
+    <div class="carousel-item">
+      <img src="https://www.fender.cl/media/wysiwyg/slider_american-performer.jpg" class="d-block w-100" alt="">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<!-- FIN CARRUSEL-->
+<br>
+
+<!-- LISTADO DE PRODUCTOS-->
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col">
+      <h4 class="text-center">Productos disponibles</h4><br>
+      <div class="row">
+        <div class="card col-12 col-md-6 col-lg-3"
+          *ngFor="let items of productosActual; let i = index; filter : searchText">
+          <img width="250" src="{{items.img}}" class="img-fluid img-thumbnail" (click)="productoModal(i)"
+            data-bs-target="#exampleModa2" data-bs-toggle="modal"><br>
+          <span class="fw-bolder">{{items.nombre}}</span><br>
+          <span>{{items.precio | currency:' CLP '}}</span><br>
+
+          <button mat-raised-button type="button " class="btn btn-success col-12" (click)="agregarProducto(i)"><i
+              style="color:green" class="fa fa-plus-circle" aria-hidden="true"></i>Agregar</button>
+          <br>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--FIN LISTADO DE PRODUCTOS-->
+
+
+
+
+
+
+<!-- Prueba-->
+
+
+
+
+<div class="modal" tabindex="-1" id="exampleModa2">
+  <div class="modal-dialog modal-xl ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="card">
+            <div class="container-fliud">
+              <div class="preview-pic tab-content" *ngFor="let items of productoSeleccionado; let i = index">
+                <div class="wrapper row">
+                  <div class="col-md-6">
+                    <div class="tab-pane active"><img src={{items.img}} /></div>
+                  </div>
+                  <div class="col-md-6">
+                    <h3 class="product-title">{{items.nombre}}</h3>
+
+                    <p class="product-description">{{items.descripcion}}</p>
+                    <h4 class="price">current price: <span>{{items.precio}}</span></h4>
+                    <div class="action">
+                      <button class="add-to-cart btn btn-default" type="button">add to cart</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--fin prueba-->
+
+
+
+<!-- Modal Carrito de compra -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="exampleModalLabel">Carrito de compra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table *ngIf="productosCarrito.length>0" class="table table-image">
+          <thead>
+            <tr>
+              <th scope="col">Selección</th>
+              <th scope="col">Producto</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Total</th>
+              <th scope="col">Eliminar</th>
+              <th scope="col">Modificar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of productosCarrito; let j = index">
+              <td class="w-25">
+                <img src="{{p.img}}" class="img-fluid img-thumbnail" alt="Sheep">
+              </td>
+              <td>{{p.nombre}}</td>
+              <td>{{p.precio}}</td>
+              <td style="width:15%;"><input type="text" class="form-control" [formControl]="cantidad" id="input1"
+                  placeholder="{{productosCantidad[j+1].cant}}"></td>
+              <td>{{p.precio*productosCantidad[j+1].cant}}</td>
+              <td>
+                <button (click)="eliminarProducto(p.codigo)" class="btn btn-danger btn-sm ">
+                  <i class="fa fa-times"></i>
+                </button> &nbsp;
+              </td>
+              <td> <button (click)="actualizarProducto(p.codigo)" href="#" class="btn btn-success btn-sm">
+                  <i class="fas fa-sync-alt"></i>
+                </button></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <th>Total:</th>
+              <td>{{totalDinero | currency:'CLP'}}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      <div *ngIf="productosCarrito.length==0">
+          <p>No existen productos en el carrito de compras</p>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button data-bs-dismiss="modal" type="button" *ngIf="productosCarrito.length>0" routerLink="../datosEnvio" class="btn btn-primary">Continuar Compra</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!--FOOTER-->
+
+
+<footer class="section footer-classic context-dark bg-dark">
+  <div class="container">
+    <div class="row row-30">
+      <div class="col-md-4 col-xl-5">
+        <div class="pr-xl-4"><a class="brand" href="index.html"><img class="brand-logo-light"
+              src="images/agency/logo-inverse-140x37.png" alt="" width="140" height="37"
+              srcset="images/agency/logo-retina-inverse-280x74.png 2x"></a>
+          <p>Servicio que ofrece exclusivamente de nuestra tienda a sus clientes para proteger su instrumento y equipos
+            de audio desde el momento de la compra.</p>
+          <!-- Rights-->
+          <p class="rights"><span>©  </span><span
+              class="copyright-year">2021</span><span> </span><span>everis</span><span>. </span><span>All Rights
+              Reserved.</span></p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h5>Contacts</h5>
+        <dl class="contact-list">
+          <dt>direccion:</dt>
+          <dd>Avenida siempre viva, 1212</dd>
+        </dl>
+        <dl class="contact-list">
+          <dt>email:</dt>
+          <dd><a href="mailto:#">emusica@gmail.com</a></dd>
+        </dl>
+        <dl class="contact-list">
+          <dt>telefono de contactos:</dt>
+          <dd><a href="tel:#">5555-5555</a> <span>or</span> <a href="tel:#">7777-7777</a>
+          </dd>
+        </dl>
+      </div>
+      <div class="col-md-4 col-xl-3">
+        <h5>Links</h5>
+        <ul class="nav-list">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Projects</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contacts</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row no-gutters social-container">
+    <div class="col"><a class="social-inner" href="#"><span
+          class="icon mdi mdi-facebook"></span><span>Facebook</span></a></div>
+    <div class="col"><a class="social-inner" href="#"><span
+          class="icon mdi mdi-instagram"></span><span>instagram</span></a></div>
+    <div class="col"><a class="social-inner" href="#"><span class="icon mdi mdi-twitter"></span><span>twitter</span></a>
+    </div>
+    <div class="col"><a class="social-inner" href="#"><span
+          class="icon mdi mdi-youtube-play"></span><span>google</span></a></div>
+  </div>
+</footer>
